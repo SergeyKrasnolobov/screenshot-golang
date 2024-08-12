@@ -100,13 +100,14 @@ func rawHtmlScreenshot(html string, height *int64, width *int64, res *[]byte) ch
 	var viewPort VParams
 	var defaultHeight int64 = int64(768)
 	var defaultWidth int64 = int64(1024)
-	// origin 'null' has been blocked by CORS policy: Response to preflight request doesn't pass access control check: No 'Access-Control-Allow-Origin' header is present on the requested resource.
-	// HTTPHeaders := map[string]interface{}{
-	// 	"Access-Control-Allow-Origin":   "*",
-	// 	"Access-Control-Allow-Headers":  "Access-Control-Allow-Origin, Authorization, Origin, X-Requested-With, Content-Type, Accept, ETag, Cache-Control, If-None-Match",
-	// 	"Access-Control-Expose-Headers": "Access-Control-Allow-Origin, Authorization, Origin, X-Requested-With, Content-Type, Accept, Etag, Cache-Control, If-None-Match",
-	// 	"Access-Control-Allow-Methods":  "POST, GET",
-	// }
+	corsHeaders := map[string]interface{}{
+		"Host":                          "http://127.0.0.1:3001",
+		"Access-Control-Allow-Headers":  "Accept, Authorization, Content-Type, Origin",
+		"Access-Control-Allow-Methods":  "GET, POST, DELETE, OPTIONS",
+		"Access-Control-Allow-Origin":   "*",
+		"Access-Control-Expose-Headers": "Date",
+		"Cache-Control":                 "no-cache, no-store, must-revalidate",
+	}
 
 	if viewPort.Height = &defaultHeight; height != nil {
 		viewPort.Height = height
@@ -120,17 +121,14 @@ func rawHtmlScreenshot(html string, height *int64, width *int64, res *[]byte) ch
 
 	return chromedp.Tasks{
 		network.Enable(),
-		network.SetExtraHTTPHeaders(network.Headers(map[string]interface{}{
-			"Access-Control-Allow-Origin":  "*",
-			"Access-Control-Allow-Methods": "POST, GET",
-		})),
+		network.SetExtraHTTPHeaders(network.Headers(corsHeaders)),
 		chromedp.EmulateViewport(*viewPort.Width, *viewPort.Height, scale),
 		chromedp.Navigate("about:blank"),
 		chromedp.PollFunction(`(html) => {
 			document.open();
 			document.write(html);
-			document.close();
-			return true;
+			// document.close();
+			// return true
 		}`, nil, chromedp.WithPollingArgs(html)),
 		chromedp.CaptureScreenshot(res),
 	}

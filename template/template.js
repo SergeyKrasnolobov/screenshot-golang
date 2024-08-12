@@ -5,10 +5,10 @@ function getHtml() {
             <head>
                 <meta charset="UTF-8">
                 <title>Title</title>
-                <link rel="preload" href="http://localhost:3001/assets/fonts/manrope/manrope-medium.woff2" as="font" type="font/woff2">
-                <link rel="preload" href="http://localhost:3001/assets/fonts/manrope/manrope-bold.woff2" as="font" type="font/woff2">
-                <link rel="preload" href="http://localhost:3001/assets/fonts/arial-rub/arial-rub.woff2" as="font" type="font/woff2">
-                <link rel="preload" href="http://localhost:3001/assets/fonts/arial-rub/arial-rub-bold.woff2" as="font" type="font/woff2">
+                <link rel="preload" href="http://127.0.0.1:3001/assets/fonts/manrope/manrope-medium.woff2" as="font" type="font/woff2" crossorigin>
+                <link rel="preload" href="http://127.0.0.1:3001/assets/fonts/manrope/manrope-bold.woff2" as="font" type="font/woff2" crossorigin>
+                <link rel="preload" href="http://127.0.0.1:3001/assets/fonts/arial-rub/arial-rub.woff2" as="font" type="font/woff2" crossorigin>
+                <link rel="preload" href="http://127.0.0.1:3001/assets/fonts/arial-rub/arial-rub-bold.woff2" as="font" type="font/woff2" crossorigin>
                 
                 <style>
                     *, *::after, *::before {
@@ -22,26 +22,26 @@ function getHtml() {
 
                     @font-face {
                         font-family: Manrope;
-                        src: url('http://localhost:3001/assets/fonts/manrope/manrope-medium.woff2') format('woff2');
+                        src: url('http://127.0.0.1:3001/assets/fonts/manrope/manrope-medium.woff2') format('woff2');
                         font-weight: 100 400;
                     }
 
                     @font-face {
                         font-family: Manrope;
-                        src: url('http://localhost:3001/assets/fonts/manrope/manrope-bold.woff2') format('woff2');
+                        src: url('http://127.0.0.1:3001/assets/fonts/manrope/manrope-bold.woff2') format('woff2');
                         font-weight: 700 800;
                     }
 
                     @font-face {
                         font-family: 'Arial Rub';
                         font-weight: normal;
-                        src: url('http://localhost:3001/assets/fonts/arial-rub/arial-rub.woff2') format('woff2');
+                        src: url('http://127.0.0.1:3001/assets/fonts/arial-rub/arial-rub.woff2') format('woff2');
                     }
 
                     @font-face {
                         font-family: 'Arial Rub';
                         font-weight: bold;
-                        src: url('http://localhost:3001/assets/fonts/arial-rub/arial-rub-bold.woff2') format('woff2');
+                        src: url('http://127.0.0.1:3001/assets/fonts/arial-rub/arial-rub-bold.woff2') format('woff2');
                     }
 
                     .container {
