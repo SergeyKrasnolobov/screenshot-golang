@@ -1,0 +1,14 @@
+{
+  "name": "template",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "engines": {
+    "node": ">=16.0.0"
+  },
+  "scripts": {
+    "generate": "node ."
+  },
+  "author": "Sergey Krasnolobov",
+  "license": "ISC"
+}
