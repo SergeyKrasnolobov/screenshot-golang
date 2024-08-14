@@ -4,6 +4,7 @@ import (
 	"context"
 	"flag"
 	"fmt"
+	"log"
 	"log/slog"
 	"net/http"
 	"os"
@@ -59,14 +60,25 @@ func main() {
 		os.Exit(1)
 	}
 
-	fileServer := http.FileServer(http.Dir("./public/assets/"))
-
 	mux := http.NewServeMux()
 
 	// serve assets files
-	mux.Handle("/assets/", http.StripPrefix("/assets", fileServer))
+	mux.Handle("/assets/", http.StripPrefix("/assets", staticFileServer()))
 
 	mux.Handle("/chrome/screenshot/", generate.New(log, chromeNew))
 
-	http.ListenAndServe(fmt.Sprintf(":%d", port), mux) //nolint:gosec
+	http.ListenAndServe(fmt.Sprintf(":%d", port), mux)
+}
+
+func staticFileServer() http.Handler {
+	fs := http.FileServer(http.Dir("./public/assets/"))
+	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		clientRemoteAddr := r.RemoteAddr
+		clientHOST := r.URL.Host
+		log.Printf("clientRemoteAddr: %s", clientRemoteAddr)
+		log.Printf("clientHOST: %s", clientHOST)
+		w.Header().Set("Access-Control-Allow-Origin", "*")
+		w.Header().Set("Access-Control-Allow-Methods", "POST, GET, OPTIONS, PUT, DELETE")
+		fs.ServeHTTP(w, r)
+	})
 }
