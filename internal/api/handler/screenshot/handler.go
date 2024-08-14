@@ -10,7 +10,6 @@ import (
 	types "screenshot/internal/pkg"
 	"screenshot/internal/pkg/chrome"
 
-	"github.com/chromedp/cdproto/network"
 	"github.com/chromedp/chromedp"
 )
 
@@ -86,7 +85,6 @@ func (h *Handler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 
 func makeScreenshot(ctx context.Context, params types.InputBody) ([]byte, error) {
 	var buf []byte
-
 	if params.Source != "" {
 		if err := chromedp.Run(ctx, rawHtmlScreenshot(params.Source, &params.Viewport.Height, &params.Viewport.Width, &buf)); err != nil {
 			_, err := fmt.Printf("failed to make rawHtmlScreenshot: %v", err)
@@ -102,63 +100,6 @@ func rawHtmlScreenshot(html string, height *int64, width *int64, res *[]byte) ch
 	var defaultHeight int64 = int64(768)
 	var defaultWidth int64 = int64(1024)
 
-	// test html for quick testing
-	htmltest := `
-	<html>
-		<head>
-			<meta charset="UTF-8">
-			<title>Title</title>
-            <link rel="preload" href="http://127.0.0.1:3001/assets/fonts/manrope/manrope-bold.woff2" as="font" type="font/woff2" crossorigin>
-			<style>
-				*, *::after, *::before {
-					animation-delay: -0.0001s !important;
-					animation-duration: 0s !important;
-					animation-play-state: paused !important;
-					transition-delay: 0s !important;
-					transition-duration: 0s !important;
-					caret-color: transparent !important;
-				}
-
-				@font-face {
-                        font-family: Manrope;
-                        src: url('http://127.0.0.1:3001/assets/fonts/manrope/manrope-bold.woff2') format('woff2');
-                        font-weight: 700 800;
-                }
-
-
-				.container {
-					width: 100%;
-				}
-
-				.button {
-					width: 200px;
-					height: 60px;
-					background: rebeccapurple;
-					color: white;
-					border-radius: 10px;
-				}
-
-				.test {
-					font-family: "Manrope";
-					font-weight: 800;
-					font-size: 20px;
-				}
-			</style>
-		</head>
-		<body>
-			<div class="contaner">
-				<button class="button">
-				<span class="test">Hellow world</span>
-				</button>
-			</div>
-		</body>
-	</html>
-`
-
-	extraHeaders := map[string]interface{}{
-		"Host": "http://127.0.0.1:3001",
-	}
-
 	if viewPort.Height = &defaultHeight; height != nil {
 		viewPort.Height = height
 	}
@@ -170,16 +111,14 @@ func rawHtmlScreenshot(html string, height *int64, width *int64, res *[]byte) ch
 	scale := chromedp.EmulateScale(1)
 
 	return chromedp.Tasks{
-		network.Enable(),
-		network.SetExtraHTTPHeaders(network.Headers(extraHeaders)),
 		chromedp.EmulateViewport(*viewPort.Width, *viewPort.Height, scale),
 		chromedp.Navigate("about:blank"),
 		chromedp.PollFunction(`(html) => {
 			document.open();
 			document.write(html);
-			// document.close(); // just for testing
-			// return true // just for testing
-		}`, nil, chromedp.WithPollingArgs(htmltest)),
+			document.close(); 
+			return true 
+		}`, nil, chromedp.WithPollingArgs(html)),
 		chromedp.CaptureScreenshot(res),
 	}
 }

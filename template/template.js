@@ -57,14 +57,14 @@ function getHtml() {
                     }
 
                     .test {
-                        font-family: "Arial Rub";
+                        font-family: Manrope;
                         font-weight: 800;
                         font-size: 20px;
                     }
                 </style>
             </head>
             <body>
-                <div class="contaner">
+                <div class="container">
                     <button class="button">
                         <span class="test">Hellow world</span>
                     </button>

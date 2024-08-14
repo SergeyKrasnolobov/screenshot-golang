@@ -4,7 +4,6 @@ import (
 	"context"
 	"flag"
 	"fmt"
-	"log"
 	"log/slog"
 	"net/http"
 	"os"
@@ -73,12 +72,10 @@ func main() {
 func staticFileServer() http.Handler {
 	fs := http.FileServer(http.Dir("./public/assets/"))
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		clientRemoteAddr := r.RemoteAddr
-		clientHOST := r.URL.Host
-		log.Printf("clientRemoteAddr: %s", clientRemoteAddr)
-		log.Printf("clientHOST: %s", clientHOST)
 		w.Header().Set("Access-Control-Allow-Origin", "*")
-		w.Header().Set("Access-Control-Allow-Methods", "POST, GET, OPTIONS, PUT, DELETE")
+		w.Header().Set("Access-Control-Allow-Headers", "Access-Control-Allow-Origin, Authorization, Origin, X-Requested-With, Content-Type, Accept, ETag, Cache-Control, If-None-Match")
+		w.Header().Set("Access-Control-Expose-Headers", "Access-Control-Allow-Origin, Authorization, Origin, X-Requested-With, Content-Type, Accept, Etag, Cache-Control, If-None-Match")
+		w.Header().Set("Access-Control-Allow-Methods", "POST, GET")
 		fs.ServeHTTP(w, r)
 	})
 }

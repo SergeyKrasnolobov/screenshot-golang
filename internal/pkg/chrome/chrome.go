@@ -15,9 +15,9 @@ import (
 func (s *service) NewWorkerAllocator(ctx context.Context) (context.Context, context.CancelFunc) {
 	options := chromedp.DefaultExecAllocatorOptions[:]
 	options = append(options,
-		chromedp.Flag("headless", false), // to check if static resources are loaded
-		chromedp.Flag("no-sandbox", false),
-		chromedp.Flag("disable-gpu", false),
+		chromedp.Flag("headless", true),
+		chromedp.Flag("no-sandbox", true),
+		chromedp.Flag("disable-gpu", true),
 		chromedp.Flag("remote-debugging-address", s.headlessHost),
 		chromedp.Flag("remote-debugging-port", fmt.Sprintf("%d", s.headlessPort)),
 	)
